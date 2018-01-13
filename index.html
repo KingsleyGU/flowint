@@ -251,7 +251,7 @@
     <!--  FIRST DIV -->
     <div id="aboutme" class="contentAboutme">
         <h2>Grow your business with Flowint</h2>
-        <canvas id="canvas" class="canvasAboutme" width="600" height="600">
+        <canvas id="canvas" class="canvasAboutme" width="600" height="600" style="display: inline-block;">
             
         </canvas>
         <!-- <p>
@@ -261,7 +261,8 @@
                 </video>
             </div>
             <!-- content of about me <a href="#" class="readme">［Read me］</a> -->
-        </p> -->
+       <!--  </p> -->
+       <div id="test-div" style="display: none; width: 100px; height: 500px; background-color: red;"></div>
     </div>
     <div id="content-fourgrid" class=" content-small-four" style="margin-top:20px;">
         <h2>Be better than the rest</h2>
@@ -346,6 +347,7 @@
     <div class="svgLogo">
     <img src="image/circle.svg" alt="logo" width="500px">
     </div>
+
     
 
     <!--  <div class="buttonbar col-lg-5" >
@@ -400,11 +402,45 @@ var sun = new Image();
 var moon = new Image();
 var earth = new Image();
 var earth2 = new Image();
+var image1 = new Image();
+var image2 = new Image();
+var image3 = new Image();
+var image1pos = {};
+var image2pos = {};
+var image3pos = {};
+image1pos["X"] = Math.sqrt(3)/2*200-50;
+image1pos["Y"] = 100-50;
+image2pos["X"] = Math.sqrt(3)/2*200*(-1)-50;
+image2pos["Y"] = 100-50;
+image3pos["X"] = -50;
+image3pos["Y"] = -200-50;
 function init() {
   sun.src = 'image/LogoRobot_flowint.dk_.gif';
   moon.src = 'https://mdn.mozillademos.org/files/1443/Canvas_moon.png';
-  earth.src = 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRji8wkYOAfmWCqw8QF8e6bqi77qwAJeOvNm0RqwZF2nYqcTbEl';
+  earth.src = 'http://www.clker.com/cliparts/v/L/R/K/N/Z/down-arrow-filled-hi.png';
   earth2.src = 'https://mdn.mozillademos.org/files/1429/Canvas_earth.png';
+
+  var ctx = document.getElementById('canvas').getContext('2d');
+
+  image1.src = "https://i.pinimg.com/736x/47/9c/b5/479cb5213b580b6efae50724ae4ce649--funny-pets-funny-animals.jpg";
+  image2.src = "https://i.pinimg.com/736x/47/9c/b5/479cb5213b580b6efae50724ae4ce649--funny-pets-funny-animals.jpg";
+  image3.src = "https://i.pinimg.com/736x/47/9c/b5/479cb5213b580b6efae50724ae4ce649--funny-pets-funny-animals.jpg";
+  image1.id = "image1";
+   document.getElementById('canvas').addEventListener("mousedown", function (e) {
+    var canvasX = document.getElementById('canvas').getBoundingClientRect().left;
+    var canvasY = document.getElementById('canvas').getBoundingClientRect().top;
+    var x;
+    var y;
+    if (e.clientX != undefined && e.clientY != undefined) {
+    x = e.clientX;
+    y = e.clientY;
+    }
+    // alert("x:" + x+"   Y:" + y );
+    // alert("canvas x:" + canvasX+"   Y:" + canvasY );
+    // alert("rel X:"+(x-canvasX)+"  Y:"+(y-canvasY));
+    alert(imageClickedNum(x-canvasX-300,y-canvasY-300));
+  },false);
+
   window.requestAnimationFrame(draw);
 }
 
@@ -418,13 +454,24 @@ function draw() {
   ctx.strokeStyle = 'rgba(0, 153, 255, 0.4)';
   ctx.save();
   ctx.translate(300, 300);
-
-  // Earth
+  ctx.drawImage(image1,image1pos["X"],image1pos["Y"],100,100);
+  ctx.drawImage(image2,image2pos["X"],image2pos["Y"],100,100);
+  ctx.drawImage(image3,image3pos["X"],image3pos["Y"],100,100);
+  
   var time = new Date();
-  ctx.rotate(((2 * Math.PI) / 60) * time.getSeconds() + ((2 * Math.PI) / 60000) * time.getMilliseconds());
+  var angle = ((2 * Math.PI) / 60) * time.getSeconds() + ((2 * Math.PI) / 60000) * time.getMilliseconds();
+  ctx.rotate(angle);
   ctx.translate(200, 0);
   // ctx.fillRect(0, -12, 50, 24); // Shadow
-  ctx.drawImage(earth, -50, -50,100,100);
+  ctx.drawImage(earth, -25, -25,50,50);
+  var angleDegree = angle*180/Math.PI;
+  if(imageClickedNum(200*Math.cos(angle),200*Math.sin(angle))!=0)
+  {
+    document.getElementById("test-div").style.display = 'inline-block';
+  }
+  else
+    document.getElementById("test-div").style.display = 'none';
+
 
   // //   var time = new Date();
   // // ctx.rotate(((2 * Math.PI) / 60) * time.getSeconds() + ((2 * Math.PI) / 60000) * time.getMilliseconds());
@@ -451,6 +498,17 @@ function draw() {
 }
 
 init();
+function imageClickedNum(x,y)
+{
+    if((x-image1pos["X"])>-10&&(x-image1pos["X"])<110&&(y-image1pos["Y"])>-10&&(y-image1pos["Y"])<110)
+        return 1;
+    else if((x-image2pos["X"])>-10&&(x-image2pos["X"])<110&&(y-image2pos["Y"])>-10&&(y-image2pos["Y"])<110)
+        return 2;
+    else if((x-image3pos["X"])>-10&&(x-image3pos["X"])<110&&(y-image3pos["Y"])>-10&&(y-image3pos["Y"])<110)
+        return 3;
+    else
+        return 0;
+}
 
     </script>
 </body>
